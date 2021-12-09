@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: postgres:10.10-alpine
+
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${DEFAULT_DB_PASSWORD}
+      POSTGRES_USER: ${DEFAULT_DB_USER}
+      POSTGRES_DB: ${DEFAULT_DB_NAME}
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./backups:/opt/backups
+
+    ports:
+      - "${DB_EXPOSE_PORT}:${DEFAULT_DB_PORT}"
+  web:
+    container_name: web
+    image: python:3.8-alpine
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "postgres://${DEFAULT_DB_USER}:${DEFAULT_DB_PASSWORD}@${DEFAULT_D\
+        B_HOST}:${DEFAULT_DB_PORT}/${DEFAULT_DB_NAME}"
+      WEB_PORT: ${WEB_PORT}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
+    links:
+      - db
+    depends_on:
+      - db

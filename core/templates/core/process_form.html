@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row mt-5 mb-3">
+        <div class="col">
+          <h1>Formulário processo</h1>
+        </div>
+    </div>
+    <div class="row mb-3 mt-3">
+        <div class="col text-right">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form action="" method="post" autocomplete="off">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                <div class="row">
+                    <div class="col">
+                        {{form.as_p}}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <h3>Partes</h3>
+                    </div>
+                </div>
+                <div id="items-form-container" class="mb-3">
+
+                    {% for item_form in formset %}
+                        <div id="item-{{ forloop.counter0 }}" class="row mb-3 border-bottom">
+                            <div class="col">
+                                {{ item_form.id }}
+                                {{ item_form.as_p }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row mb-4">
+                    <div class="col text-right">
+                        <a href="#" id="add-item-button" class="btn btn-info add-item">Novo</a>
+                    </div>
+                </div>
+
+                <div class="row mb-3 mt-4">
+                    <div class="col text-left">
+                        <a href="{% url 'core:list' %}" class="btn btn-danger">Cancelar</a>
+                    </div>
+                    <div class="col text-right">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/html" id="item-template">
+    <div id="item-__prefix__" class="row mb-3 border-bottom">
+        <div class="col">
+            {{ formset.empty_form.as_p }}
+        </div>
+    </div>
+</script>
+<script>
+    $(document).ready(function() {
+        $('.add-item').click(function(ev) {
+            ev.preventDefault();
+            
+            var count = $('#items-form-container').children().length;
+            var tmplMarkup = $('#item-template').html();
+            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+            
+            $('div#items-form-container').append(compiledTmpl);
+    
+            // update form count
+            $('#id_form-TOTAL_FORMS').attr('value', count + 1);
+    
+            // some animate to scroll to view our new form
+            $('html, body').animate({
+                scrollTop: $("#add-item-button").position().top + 400
+            }, 800);
+        });
+    });
+    </script>
+{% endblock %}

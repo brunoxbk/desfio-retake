@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row clearfix">
+    <div class="col mt-4 mb-4">
+      
+        
+        <h3>Você tem certeza que deseja deletar o processo "{{ object }}" ?</h3>
+        
+        
+        <form method="post" action="">
+          {% csrf_token %}
+          <br>
+          <br>
+          <div class="row">
+            <div class="col mt-4 mb-4">
+                <a class="btn btn-danger waves-effect" href="{% url 'core:list' %}">
+                    Cancelar
+                </a>
+                <button type="submit" value="" class="btn btn-primary" >
+                    Apagar
+                </button>
+            </div>
+          </div>
+        </form>
+        
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row mt-5 mb-3">
+        <div class="col">
+          <h1>Processo {{object.number}}</h1>
+        </div>
+    </div>
+    <div class="row mb-3 mt-3">
+        <div class="col">
+            
+            <div class="card">
+                <div class="card-header">
+                    Dados
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Classe</dt>
+                        <dd class="col-sm-9">{{object.process_class}}</dd>
+                        <dt class="col-sm-3">Assunto</dt>
+                        <dd class="col-sm-9">{{object.subject}}</dd>
+                        <dt class="col-sm-3">Juiz</dt>
+                        <dd class="col-sm-9">{{object.judge}}</dd>
+                    </dl>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    <div class="row mb-3 mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                  Partes
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for part  in object.parts.all %}
+                        <li class="list-group-item">{{part.name}} - {{part.category}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
